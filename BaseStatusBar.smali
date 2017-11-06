@@ -435,6 +435,118 @@
 .end method
 
 .method public static getRowIcon(Landroid/content/Context;Lcom/android/systemui/statusbar/ExpandedNotification;)Landroid/graphics/drawable/Drawable;
+.locals 2
+
+    :try_start_0
+    invoke-virtual {p1}, Lcom/android/systemui/statusbar/ExpandedNotification;->getPackageName()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v1}, Landroid/content/pm/PackageManager;->getResourcesForApplication(Ljava/lang/String;)Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    invoke-virtual {p1}, Lcom/android/systemui/statusbar/ExpandedNotification;->getNotification()Landroid/app/Notification;
+
+    move-result-object v1
+
+    iget v1, v1, Landroid/app/Notification;->icon:I
+
+    invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    invoke-static {p0, v0}, Lcom/android/systemui/statusbar/BaseStatusBar;->highlightImage(Landroid/content/Context;Landroid/graphics/drawable/Drawable;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    if-nez v0, :cond_0
+
+    invoke-static {p0, p1}, Lcom/android/systemui/statusbar/BaseStatusBar;->getRowIcon_origin(Landroid/content/Context;Lcom/android/systemui/statusbar/ExpandedNotification;)Landroid/graphics/drawable/Drawable;
+
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v0
+
+    :cond_0
+    :goto_0
+    return-object v0
+
+    :catch_0
+    move-exception v1
+
+    invoke-static {p0, p1}, Lcom/android/systemui/statusbar/BaseStatusBar;->getRowIcon_origin(Landroid/content/Context;Lcom/android/systemui/statusbar/ExpandedNotification;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    goto :goto_0
+
+.end method
+
+.method public static getRowIcon2(Landroid/content/Context;Lcom/android/systemui/statusbar/ExpandedNotification;)Landroid/graphics/drawable/Drawable;
+    .locals 3
+
+    invoke-virtual {p1}, Lcom/android/systemui/statusbar/ExpandedNotification;->getPackageName()Ljava/lang/String;
+
+    move-result-object v1
+
+    const-string v0, "com.android.incallui"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
+    const-string v0, "com.android.phone"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
+    const-string v0, "com.android.server.telecom"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
+    invoke-virtual {p1}, Lcom/android/systemui/statusbar/ExpandedNotification;->getNotification()Landroid/app/Notification;
+
+    move-result-object v1
+
+    iget-object v1, v1, Landroid/app/Notification;->largeIcon:Landroid/graphics/Bitmap;
+
+    if-eqz v1, :cond_0
+
+    new-instance v0, Landroid/graphics/drawable/BitmapDrawable;
+
+    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    invoke-direct {v0, v2, v1}, Landroid/graphics/drawable/BitmapDrawable;-><init>(Landroid/content/res/Resources;Landroid/graphics/Bitmap;)V
+
+    goto :goto_0
+
+    :cond_0
+    invoke-static {p0, p1}, Lcom/android/systemui/statusbar/BaseStatusBar;->getRowIcon_origin(Landroid/content/Context;Lcom/android/systemui/statusbar/ExpandedNotification;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    :goto_0
+    return-object v0
+.end method
+
+.method public static getRowIcon_origin(Landroid/content/Context;Lcom/android/systemui/statusbar/ExpandedNotification;)Landroid/graphics/drawable/Drawable;
     .locals 11
 
     const/4 v10, 0x1
@@ -983,6 +1095,215 @@
     :cond_0
     return-void
 .end method
+
+.method public static highlightImage(Landroid/content/Context;Landroid/graphics/drawable/Drawable;)Landroid/graphics/drawable/Drawable;
+    .locals 16
+
+    :try_start_0
+    move-object/from16 v0, p1
+
+    instance-of v12, v0, Landroid/graphics/drawable/AnimationDrawable;
+
+    if-eqz v12, :cond_1
+
+    move-object/from16 v0, p1
+
+    check-cast v0, Landroid/graphics/drawable/AnimationDrawable;
+
+    move-object v8, v0
+
+    new-instance v6, Landroid/graphics/drawable/AnimationDrawable;
+
+    invoke-direct {v6}, Landroid/graphics/drawable/AnimationDrawable;-><init>()V
+
+    const/4 v5, 0x0
+
+    :goto_0
+    invoke-virtual {v8}, Landroid/graphics/drawable/AnimationDrawable;->getNumberOfFrames()I
+
+    move-result v12
+
+    if-lt v5, v12, :cond_0
+
+    :goto_1
+    return-object v6
+
+    :cond_0
+    invoke-virtual {v8, v5}, Landroid/graphics/drawable/AnimationDrawable;->getFrame(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v12
+
+    move-object/from16 v0, p0
+
+    invoke-static {v0, v12}, Lcom/android/systemui/statusbar/BaseStatusBar;->highlightImage(Landroid/content/Context;Landroid/graphics/drawable/Drawable;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v12
+
+    invoke-virtual {v8, v5}, Landroid/graphics/drawable/AnimationDrawable;->getDuration(I)I
+
+    move-result v13
+
+    invoke-virtual {v6, v12, v13}, Landroid/graphics/drawable/AnimationDrawable;->addFrame(Landroid/graphics/drawable/Drawable;I)V
+
+    add-int/lit8 v5, v5, 0x1
+
+    goto :goto_0
+
+    :cond_1
+    invoke-virtual/range {p1 .. p1}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v12
+
+    invoke-virtual/range {p1 .. p1}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v13
+
+    sget-object v14, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {v12, v13, v14}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v11
+
+    const/4 v12, 0x0
+
+    const/4 v13, 0x0
+
+    invoke-virtual/range {p1 .. p1}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v14
+
+    invoke-virtual/range {p1 .. p1}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v15
+
+    move-object/from16 v0, p1
+
+    invoke-virtual {v0, v12, v13, v14, v15}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+
+    new-instance v12, Landroid/graphics/Canvas;
+
+    invoke-direct {v12, v11}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    move-object/from16 v0, p1
+
+    invoke-virtual {v0, v12}, Landroid/graphics/drawable/Drawable;->draw(Landroid/graphics/Canvas;)V
+
+    invoke-virtual {v11}, Landroid/graphics/Bitmap;->getWidth()I
+
+    move-result v12
+
+    invoke-virtual {v11}, Landroid/graphics/Bitmap;->getHeight()I
+
+    move-result v13
+
+    sget-object v14, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {v12, v13, v14}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v2
+
+    new-instance v3, Landroid/graphics/Canvas;
+
+    invoke-direct {v3, v2}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    const/4 v12, 0x0
+
+    sget-object v13, Landroid/graphics/PorterDuff$Mode;->CLEAR:Landroid/graphics/PorterDuff$Mode;
+
+    invoke-virtual {v3, v12, v13}, Landroid/graphics/Canvas;->drawColor(ILandroid/graphics/PorterDuff$Mode;)V
+
+    new-instance v10, Landroid/graphics/Paint;
+
+    invoke-direct {v10}, Landroid/graphics/Paint;-><init>()V
+
+    new-instance v12, Landroid/graphics/BlurMaskFilter;
+
+    const/high16 v13, 0x40e00000    # 7.0f
+
+    sget-object v14, Landroid/graphics/BlurMaskFilter$Blur;->NORMAL:Landroid/graphics/BlurMaskFilter$Blur;
+
+    invoke-direct {v12, v13, v14}, Landroid/graphics/BlurMaskFilter;-><init>(FLandroid/graphics/BlurMaskFilter$Blur;)V
+
+    invoke-virtual {v10, v12}, Landroid/graphics/Paint;->setMaskFilter(Landroid/graphics/MaskFilter;)Landroid/graphics/MaskFilter;
+
+    const/4 v12, 0x2
+
+    new-array v7, v12, [I
+
+    invoke-virtual {v11, v10, v7}, Landroid/graphics/Bitmap;->extractAlpha(Landroid/graphics/Paint;[I)Landroid/graphics/Bitmap;
+
+    move-result-object v1
+
+    new-instance v9, Landroid/graphics/Paint;
+
+    invoke-direct {v9}, Landroid/graphics/Paint;-><init>()V
+
+    const/high16 v12, -0x1000000
+
+    invoke-virtual {v9, v12}, Landroid/graphics/Paint;->setColor(I)V
+
+    const/4 v12, 0x0
+
+    aget v12, v7, v12
+
+    int-to-float v12, v12
+
+    const/4 v13, 0x1
+
+    aget v13, v7, v13
+
+    int-to-float v13, v13
+
+    invoke-virtual {v3, v1, v12, v13, v9}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
+
+    invoke-virtual {v1}, Landroid/graphics/Bitmap;->recycle()V
+
+    const/4 v12, 0x0
+
+    const/4 v13, 0x0
+
+    const/4 v14, 0x0
+
+    invoke-virtual {v3, v11, v12, v13, v14}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
+
+    new-instance v6, Landroid/graphics/drawable/BitmapDrawable;
+
+    invoke-virtual/range {p0 .. p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v12
+
+    invoke-direct {v6, v12, v2}, Landroid/graphics/drawable/BitmapDrawable;-><init>(Landroid/content/res/Resources;Landroid/graphics/Bitmap;)V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto/16 :goto_1
+
+    :catch_0
+    move-exception v4
+
+    const-string v12, "TAG2"
+
+    new-instance v13, Ljava/lang/StringBuilder;
+
+    const-string v14, "highlightImage exception:\n"
+
+    invoke-direct {v13, v14}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {v13, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v13
+
+    invoke-virtual {v13}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v13
+
+    invoke-static {v12, v13}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    const/4 v6, 0x0
+
+    goto/16 :goto_1
+.end method
+
 
 .method static sendCloseSystemWindows(Landroid/content/Context;Ljava/lang/String;)V
     .locals 1
